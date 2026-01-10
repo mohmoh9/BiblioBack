@@ -8,6 +8,8 @@ import ml.tamboura.Bibliotheque.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ml.tamboura.Bibliotheque.security.JwtUtil;
+
 @Service
 public class AuthService {
 
