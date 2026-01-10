@@ -1,5 +1,7 @@
 package ml.tamboura.Bibliotheque.services;
 
+import ml.tamboura.Bibliotheque.dto.LoginRequest;
+import ml.tamboura.Bibliotheque.dto.RegisterRequest;
 import ml.tamboura.Bibliotheque.entity.Role;
 import ml.tamboura.Bibliotheque.entity.User;
 import ml.tamboura.Bibliotheque.repository.UserRepository;
