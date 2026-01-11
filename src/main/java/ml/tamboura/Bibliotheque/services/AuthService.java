@@ -30,12 +30,13 @@ public class AuthService {
             throw new RuntimeException("Email déjà utilisé");
         }
 
-        User user = new User(
-                request.getName(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                Role.USER
-        );
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
+                .build();
+
 
         userRepository.save(user);
     }

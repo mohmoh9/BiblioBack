@@ -40,7 +40,11 @@ public class LoanService {
         book.setAvailable(false);
         bookRepository.save(book);
 
-        Loan loan = new Loan(user, book);
+        Loan loan = Loan.builder()
+                .user(user)
+                .book(book)
+                .loanDate(LocalDate.now())
+                .build();
         return loanRepository.save(loan);
     }
 

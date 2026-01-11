@@ -1,7 +1,11 @@
 package ml.tamboura.Bibliotheque.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @Table(name = "users")
 public class User {

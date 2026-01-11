@@ -1,9 +1,11 @@
 package ml.tamboura.Bibliotheque.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
+@Builder
 @Entity
 @Table(name = "loans")
 public class Loan {
