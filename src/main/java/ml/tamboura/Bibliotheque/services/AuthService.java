@@ -1,14 +1,17 @@
 package ml.tamboura.Bibliotheque.services;
 
+import lombok.RequiredArgsConstructor;
+import ml.tamboura.Bibliotheque.dto.AuthResponse;
 import ml.tamboura.Bibliotheque.dto.LoginRequest;
 import ml.tamboura.Bibliotheque.dto.RegisterRequest;
 import ml.tamboura.Bibliotheque.entity.Role;
 import ml.tamboura.Bibliotheque.entity.User;
 import ml.tamboura.Bibliotheque.repository.UserRepository;
+import ml.tamboura.Bibliotheque.security.JwtUtil;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import ml.tamboura.Bibliotheque.security.JwtUtil;
 
 @Service
 public class AuthService {
@@ -17,14 +20,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
-    // 📌 Inscription
-    public void register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email déjà utilisé");
@@ -37,12 +41,14 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
 
-
         userRepository.save(user);
+
+        String token = jwtUtil.generateToken(user);
+
+        return new AuthResponse(token);
     }
 
-    // 📌 Connexion
-    public String login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
@@ -51,6 +57,9 @@ public class AuthService {
             throw new RuntimeException("Mot de passe incorrect");
         }
 
-        return jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user);
+
+        return new AuthResponse(token);
     }
 }
+

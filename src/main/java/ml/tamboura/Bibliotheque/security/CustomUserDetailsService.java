@@ -1,5 +1,6 @@
 package ml.tamboura.Bibliotheque.security;
 
+import lombok.RequiredArgsConstructor;
 import ml.tamboura.Bibliotheque.entity.User;
 import ml.tamboura.Bibliotheque.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email)
@@ -30,3 +32,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 }
+

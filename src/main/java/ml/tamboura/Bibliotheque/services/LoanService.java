@@ -1,5 +1,7 @@
 package ml.tamboura.Bibliotheque.services;
 
+import lombok.RequiredArgsConstructor;
+import ml.tamboura.Bibliotheque.dto.LoanRequest;
 import ml.tamboura.Bibliotheque.entity.Book;
 import ml.tamboura.Bibliotheque.entity.Loan;
 import ml.tamboura.Bibliotheque.entity.User;
@@ -12,23 +14,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LoanService {
 
+    private final UserService  userService;
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
     private final BookRepository bookRepository;
 
-    public LoanService(UserRepository userRepository, LoanRepository loanRepository, BookRepository bookRepository) {
-        this.userRepository = userRepository;
-        this.loanRepository = loanRepository;
-        this.bookRepository = bookRepository;
-    }
-
     // 📌 Emprunter un livre
-    public Loan borrowBook(Long userId, Long bookId) {
+    public Loan borrowBook(Long bookId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        User user = userService.getCurrentUser();
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
@@ -45,11 +42,12 @@ public class LoanService {
                 .book(book)
                 .loanDate(LocalDate.now())
                 .build();
+
         return loanRepository.save(loan);
     }
 
     // 📌 Retourner un livre
-    public void returnBook(Long loanId) {
+    public Loan returnBook(Long loanId) {
 
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new RuntimeException("Emprunt introuvable"));
@@ -60,10 +58,15 @@ public class LoanService {
         book.setAvailable(true);
         bookRepository.save(book);
 
-        loanRepository.save(loan);
+        return loanRepository.save(loan);
     }
 
-    // 📌 Voir les emprunts d’un utilisateur
+    // 📌 Tous les emprunts
+    public List<Loan> getAllLoans() {
+        return loanRepository.findAll();
+    }
+
+    // 📌 Emprunts d’un utilisateur
     public List<Loan> getLoansByUser(Long userId) {
 
         User user = userRepository.findById(userId)

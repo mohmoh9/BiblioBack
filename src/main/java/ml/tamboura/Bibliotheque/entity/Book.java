@@ -1,7 +1,9 @@
 package ml.tamboura.Bibliotheque.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
+@Builder
 @Entity
 @Table(name = "books")
 public class Book {

@@ -1,5 +1,10 @@
 package ml.tamboura.Bibliotheque.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class AuthResponse {
 
     private String token;
@@ -11,11 +16,4 @@ public class AuthResponse {
         this.token = token;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }
