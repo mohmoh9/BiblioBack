@@ -19,7 +19,7 @@ public class BookService {
     }
 
     public List<Book> getAvailableBooks() {
-        return bookRepository.findByAvailableTrue();
+        return bookRepository.findAll();
     }
 
     public Book getBookById(Long id) {
@@ -33,7 +33,6 @@ public class BookService {
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())
-                .available(true)
                 .build();
 
         return bookRepository.save(book);

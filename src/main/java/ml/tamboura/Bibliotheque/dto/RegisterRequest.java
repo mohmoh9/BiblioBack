@@ -1,5 +1,6 @@
 package ml.tamboura.Bibliotheque.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -21,13 +22,17 @@ public class RegisterRequest {
     @Size(min = 6)
     private String password;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private String role;
+
+
     // Constructeurs
     public RegisterRequest() {}
 
-    public RegisterRequest(String name, String email, String password) {
+    public RegisterRequest(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
-
 }

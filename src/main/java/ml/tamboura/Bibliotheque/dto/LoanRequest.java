@@ -6,15 +6,16 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LoanRequest {
-    private Long userId;
-    private Long bookId;
+
+        private Long bookId;
+        private int durationDays; // 7, 14, 30 jours
+
 
     // Constructeurs
     public LoanRequest() {}
 
-    public LoanRequest(Long userId, Long bookId) {
-        this.userId = userId;
+    public LoanRequest(Long bookId, int durationDays) {
         this.bookId = bookId;
+        this.durationDays = durationDays;
     }
-
 }

@@ -1,77 +1,48 @@
 package ml.tamboura.Bibliotheque.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.*;
 
 @Builder
 @Entity
 @Table(name = "books")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false,length = 150)
     private String title;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false,length = 100)
     private String author;
 
-    @Column(unique = true, length = 20)
+    @Column(nullable = false,length = 50)
     private String isbn;
 
+    @Column(nullable = false,length = 200)
+    private String description;
+
     @Column(nullable = false)
-    private boolean available = true;
+    private double price;
 
-    public Book(Long id, String title, String author, String isbn, boolean available) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.available = available;
+    private boolean rentable; // louable
+    private boolean sellable; // vendable
+
+    private double rentPrice; // prix de location
+    private double sellPrice; // prix de vente
+
+    private int quantity; // stock disponible
+
+    public Book(Long bookId) {
     }
 
-    public Book() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
 }
+
+
+
