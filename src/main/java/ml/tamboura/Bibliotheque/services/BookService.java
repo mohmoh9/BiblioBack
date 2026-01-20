@@ -1,5 +1,6 @@
 package ml.tamboura.Bibliotheque.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ml.tamboura.Bibliotheque.dto.BookRequest;
 import ml.tamboura.Bibliotheque.entity.Book;
@@ -33,7 +34,6 @@ public class BookService {
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())
                 .description(request.getDescription())
-                .price(request.getPrice())
                 .rentable(request.isRentable())
                 .sellable(request.isSellable())
                 .rentPrice(request.getRentPrice())
@@ -51,7 +51,6 @@ public class BookService {
         book.setAuthor(request.getAuthor());
         book.setIsbn(request.getIsbn());
         book.setDescription(request.getDescription());
-        book.setPrice(request.getPrice());
         book.setRentable(request.isRentable());
         book.setSellable(request.isSellable());
         book.setRentPrice(request.getRentPrice());
@@ -61,7 +60,52 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    /* ================= BUY ================= */
+
+    @Transactional
+    public Book buyBook(Long bookId) {
+        Book book = getBookById(bookId);
+
+        if (!book.isSellable())
+            throw new RuntimeException("Livre non vendable");
+
+        validateStock(book);
+
+        book.setQuantity(book.getQuantity() - 1);
+        return bookRepository.save(book);
+    }
+
+    /* ================= RENT ================= */
+
+    @Transactional
+    public Book rentBook(Long bookId) {
+        Book book = getBookById(bookId);
+
+        if (!book.isRentable())
+            throw new RuntimeException("Livre non louable");
+
+        validateStock(book);
+
+        book.setQuantity(book.getQuantity() - 1);
+        return bookRepository.save(book);
+    }
+
+    /* ================= RETURN ================= */
+
+    @Transactional
+    public Book returnBook(Long id) {
+        Book book = getBookById(id);
+        book.setQuantity(book.getQuantity() + 1);
+        return bookRepository.save(book);
+    }
+
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    private void validateStock(Book book) {
+        if (book.getQuantity() <= 0) {
+            throw new RuntimeException("Stock insuffisant");
+        }
     }
 }

@@ -38,9 +38,9 @@ public class OrderService {
             item.setOrder(order);
             item.setBook(cartItem.getBook());
             item.setQuantity(cartItem.getQuantity());
-            item.setPrice(cartItem.getBook().getPrice());
+            item.setSellprice(cartItem.getBook().getSellPrice());
 
-            total += item.getPrice() * item.getQuantity();
+            total += item.getSellprice() * item.getQuantity();
 
             order.getItems().add(item);
         }

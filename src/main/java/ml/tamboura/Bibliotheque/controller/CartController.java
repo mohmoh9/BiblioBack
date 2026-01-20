@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import ml.tamboura.Bibliotheque.dto.CartDTO;
 import ml.tamboura.Bibliotheque.entity.Cart;
 import ml.tamboura.Bibliotheque.entity.CartActionType;
-import ml.tamboura.Bibliotheque.entity.User;
 import ml.tamboura.Bibliotheque.mapper.CartMapper;
 import ml.tamboura.Bibliotheque.security.CustomUserDetails;
 import ml.tamboura.Bibliotheque.services.CartService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,37 +21,53 @@ public class CartController {
     private final CartService cartService;
     private final CartMapper cartMapper;
 
+    // 🔹 Récupérer le panier
     @GetMapping
-    public CartDTO getCart(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = userDetails.getUser();
-        Cart cart = cartService.getCart(user);
-        return cartMapper.toDTO(cart);
+    public ResponseEntity<CartDTO> getCart() {
+        Cart cart = cartService.getUserCart();
+        return ResponseEntity.ok(cartMapper.toDTO(cart));
     }
 
+    // 🔹 Ajouter un livre (BUY ou RENT)
     @PostMapping("/add/{bookId}")
-    public CartDTO addBook(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<CartDTO> addToCart(
             @PathVariable Long bookId,
             @RequestParam CartActionType type,
             @RequestParam(required = false) Integer days
     ) {
-        User user = userDetails.getUser();
-        Cart cart = cartService.addBook(user, bookId, type, days);
-        return cartMapper.toDTO(cart);
+
+        // ✅ Validation métier
+        if (type == CartActionType.RENT && (days == null || days <= 0)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Cart cart = cartService.addToCart(bookId, type, days);
+        return ResponseEntity.ok(cartMapper.toDTO(cart));
     }
 
-
+    // 🔹 Supprimer un livre
     @DeleteMapping("/remove/{bookId}")
-    public CartDTO removeBook(@AuthenticationPrincipal CustomUserDetails userDetails,
-                              @PathVariable Long bookId) {
-        User user = userDetails.getUser();
-        Cart cart = cartService.removeBook(user, bookId);
-        return cartMapper.toDTO(cart);
+    public ResponseEntity<CartDTO> removeBook(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long bookId
+    ) {
+        Cart cart = cartService.removeBook(userDetails.getUser(), bookId);
+        return ResponseEntity.ok(cartMapper.toDTO(cart));
     }
 
+    // 🔹 Vider le panier
     @DeleteMapping("/clear")
-    public void clearCart(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = userDetails.getUser();
-        cartService.clearCart(user);
+    public ResponseEntity<Void> clearCart(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        cartService.clearCart(userDetails.getUser());
+        return ResponseEntity.ok().build();
+    }
+
+    // 🔹 Checkout
+    @PostMapping("/checkout")
+    public ResponseEntity<Void> checkout() {
+        cartService.checkout();
+        return ResponseEntity.ok().build();
     }
 }

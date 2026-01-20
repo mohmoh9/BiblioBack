@@ -3,6 +3,7 @@ package ml.tamboura.Bibliotheque.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -46,6 +47,9 @@ public class SecurityConfig {
                                 "/api/webhooks/**",
                                 "/api/books/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 

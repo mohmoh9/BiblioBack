@@ -8,51 +8,32 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Entity
 @Table(name = "books")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
     private String title;
-
-    @Column(nullable = false, length = 100)
     private String author;
-
-    @Column(nullable = false, length = 50, unique = true)
     private String isbn;
 
-    @Column(nullable = false, length = 500)
+    @Column(length = 500)
     private String description;
 
-    @Column(nullable = false)
-    private Double price;
+    private boolean rentable;
+    private boolean sellable;
 
-    @Column(nullable = false)
-    private boolean rentable = false;
+    private double rentPrice;
+    private double sellPrice;
 
-    @Column(nullable = false)
-    private boolean sellable = true;
-
-    @Column(name = "rent_price")
-    private Double rentPrice;
-
-    @Column(name = "sell_price")
-    private Double sellPrice;
-
-    @Column(nullable = false)
     private int quantity;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book")
     @JsonIgnore
     private List<CartItem> cartItems = new ArrayList<>();
-
 }

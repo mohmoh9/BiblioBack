@@ -37,7 +37,6 @@ public class CartMapper {
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .price(book.getPrice())
                 .build();
     }
 }

@@ -16,53 +16,78 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepository cartRepository;
-    private final BookRepository bookRepository;
+    private final BookService bookService;
+    private final UserService userService;
 
-    /**
-     * Récupérer le panier de l'utilisateur, créer s'il n'existe pas
-     */
     public Cart getCart(User user) {
         return cartRepository.findByUser(user)
                 .orElseGet(() -> createCart(user));
     }
 
-    /**
-     * Ajouter un livre au panier
-     */
-    public Cart addBook(User user, Long bookId, CartActionType type, Integer days) {
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livre introuvable"));
+    public Cart getUserCart() {
+        User user = userService.getCurrentUser();
+        return cartRepository.findByUser(user)
+                .orElseGet(() -> cartRepository.save(new Cart(null, user, new ArrayList<>())));
+    }
 
-        if (type == CartActionType.RENT && !book.isRentable())
-            throw new RuntimeException("Livre non louable");
+    public Cart addToCart(Long bookId, CartActionType type, Integer rentDays) {
 
-        if (type == CartActionType.BUY && !book.isSellable())
-            throw new RuntimeException("Livre non vendable");
+        Cart cart = getUserCart();
+        Book book = bookService.getBookById(bookId);
 
-        Cart cart = getCart(user);
+        CartItem item = cart.getItems().stream()
+                .filter(i -> i.getBook().getId().equals(bookId) && i.getType() == type)
+                .findFirst()
+                .orElse(null);
 
-        CartItem item = new CartItem();
-        item.setBook(book);
-        item.setQuantity(1);
-        item.setActionType(type);
+        if (item == null) {
+            item = new CartItem();
+            item.setBook(book);
+            item.setQuantity(1);
+            item.setType(type);
 
-        if (type == CartActionType.RENT) {
-            if (days == null || days <= 0)
-                throw new RuntimeException("Durée de location invalide");
-            item.setRentDays(days);
+            if (type == CartActionType.RENT) {
+                if (rentDays == null || rentDays <= 0)
+                    throw new RuntimeException("Nombre de jours requis");
+                item.setRentDays(rentDays);
+            }
+
+            cart.getItems().add(item);
+        } else {
+            item.setQuantity(item.getQuantity() + 1);
         }
 
-        cart.getItems().add(item);
         return cartRepository.save(cart);
     }
+
+
+    public void checkout() {
+        Cart cart = getUserCart();
+
+        for (CartItem item : cart.getItems()) {
+            if (item.getType() == CartActionType.BUY) {
+                for (int i = 0; i < item.getQuantity(); i++) {
+                    bookService.buyBook(item.getBook().getId());
+                }
+            } else {
+                for (int i = 0; i < item.getQuantity(); i++) {
+                    bookService.rentBook(item.getBook().getId());
+                }
+            }
+        }
+
+        cart.getItems().clear();
+        cartRepository.save(cart);
+    }
+
 
 
     /**
      * Supprimer un livre du panier
      */
     public Cart removeBook(User user, Long bookId) {
-        Cart cart = getCart(user);
+        Cart cart = getUserCart();
 
         cart.getItems().removeIf(
                 item -> item.getBook().getId().equals(bookId)
@@ -71,14 +96,12 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    /**
-     * Vider le panier
-     */
     public void clearCart(User user) {
-        Cart cart = getCart(user);
+        Cart cart = getUserCart();
         cart.getItems().clear();
         cartRepository.save(cart);
     }
+
 
     /**
      * Crée un nouveau panier pour l'utilisateur

@@ -12,6 +12,8 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private double price;
+
     @ManyToOne(optional = false)
     private Order order;
 
@@ -19,6 +21,6 @@ public class OrderItem {
     private Book book;
 
     private int quantity;
-    private double price;
+    private double sellprice;
 }
 

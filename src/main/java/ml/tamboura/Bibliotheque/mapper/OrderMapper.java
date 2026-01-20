@@ -25,7 +25,6 @@ public class OrderMapper {
                 .toList();
 
         dto.setItems(items);
-
         return dto;
     }
 
@@ -35,10 +34,10 @@ public class OrderMapper {
         dto.setBookId(item.getBook().getId());
         dto.setTitle(item.getBook().getTitle());
         dto.setQuantity(item.getQuantity());
-        dto.setPrice(item.getPrice());
-        dto.setTotal(item.getPrice() * item.getQuantity());
+
+        dto.setPrice(item.getPrice()); // ✅ correct
+        dto.setTotal(item.getPrice() * item.getQuantity()); // ✅ correct
 
         return dto;
     }
 }
-

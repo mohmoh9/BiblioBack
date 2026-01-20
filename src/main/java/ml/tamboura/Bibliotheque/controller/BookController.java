@@ -18,13 +18,37 @@ public class BookController {
 
     private final BookService bookService;
 
+    /* ================= ADMIN ================= */
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Book> createBook(
             @Valid @RequestBody BookRequest request) {
-
         return ResponseEntity.ok(bookService.createBook(request));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(
+            @PathVariable Long id,
+            @Valid @RequestBody BookRequest request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/return")
+    public ResponseEntity<Book> returnBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.returnBook(id));
+    }
+
+    /* ================= PUBLIC ================= */
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
@@ -41,20 +65,13 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-
-    public ResponseEntity<Book> updateBook(
-            @PathVariable Long id,
-            @Valid @RequestBody BookRequest request) {
-
-        return ResponseEntity.ok(bookService.updateBook(id, request));
+    @PostMapping("/{id}/buy")
+    public ResponseEntity<Book> buyBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.buyBook(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{id}/rent")
+    public ResponseEntity<Book> rentBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.rentBook(id));
     }
 }

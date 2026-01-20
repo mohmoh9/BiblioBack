@@ -25,7 +25,7 @@ public class CartItem {
     private int quantity;
 
     @Enumerated(EnumType.STRING)
-    private CartActionType actionType;
+    private CartActionType type;
 
-    private int rentDays; // uniquement si RENT
+    private Integer rentDays;
 }
