@@ -19,7 +19,7 @@ public class BookService {
     }
 
     public List<Book> getAvailableBooks() {
-        return bookRepository.findAll();
+        return bookRepository.findByQuantityGreaterThan(0);
     }
 
     public Book getBookById(Long id) {
@@ -28,23 +28,35 @@ public class BookService {
     }
 
     public Book createBook(BookRequest request) {
-
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .rentable(request.isRentable())
+                .sellable(request.isSellable())
+                .rentPrice(request.getRentPrice())
+                .sellPrice(request.getSellPrice())
+                .quantity(request.getQuantity())
                 .build();
 
         return bookRepository.save(book);
     }
 
     public Book updateBook(Long id, BookRequest request) {
-
         Book book = getBookById(id);
 
         book.setTitle(request.getTitle());
         book.setAuthor(request.getAuthor());
         book.setIsbn(request.getIsbn());
+        book.setDescription(request.getDescription());
+        book.setPrice(request.getPrice());
+        book.setRentable(request.isRentable());
+        book.setSellable(request.isSellable());
+        book.setRentPrice(request.getRentPrice());
+        book.setSellPrice(request.getSellPrice());
+        book.setQuantity(request.getQuantity());
 
         return bookRepository.save(book);
     }

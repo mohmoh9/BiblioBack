@@ -9,19 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "carts")
+@Table(name = "carts", uniqueConstraints = @UniqueConstraint(columnNames = "user_id"))
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Cart {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ✅ Génération auto compatible Postgres
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cart_id") // clé étrangère dans CartItem
     private List<CartItem> items = new ArrayList<>();
 }
-

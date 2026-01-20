@@ -1,19 +1,15 @@
 package ml.tamboura.Bibliotheque.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@AllArgsConstructor
 public class AuthResponse {
-
     private String token;
-
-    // Constructeurs
-    public AuthResponse() {}
-
-    public AuthResponse(String token) {
-        this.token = token;
-    }
-
+    private String email;
+    private String role;
+    private String name;
 }

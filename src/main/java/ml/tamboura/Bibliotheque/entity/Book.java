@@ -1,7 +1,12 @@
 package ml.tamboura.Bibliotheque.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
@@ -16,33 +21,38 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,length = 150)
+    @Column(nullable = false, length = 150)
     private String title;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String author;
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String isbn;
 
-    @Column(nullable = false,length = 200)
+    @Column(nullable = false, length = 500)
     private String description;
 
     @Column(nullable = false)
-    private double price;
+    private Double price;
 
-    private boolean rentable; // louable
-    private boolean sellable; // vendable
+    @Column(nullable = false)
+    private boolean rentable = false;
 
-    private double rentPrice; // prix de location
-    private double sellPrice; // prix de vente
+    @Column(nullable = false)
+    private boolean sellable = true;
 
-    private int quantity; // stock disponible
+    @Column(name = "rent_price")
+    private Double rentPrice;
 
-    public Book(Long bookId) {
-    }
+    @Column(name = "sell_price")
+    private Double sellPrice;
+
+    @Column(nullable = false)
+    private int quantity;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<CartItem> cartItems = new ArrayList<>();
 
 }
-
-
-

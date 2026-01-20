@@ -1,18 +1,16 @@
 package ml.tamboura.Bibliotheque.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class CartItemDTO {
-
-    private Long bookId;
-    private String title;
-    private double price;
+    private Long id;
+    private BookDTO book;
     private int quantity;
-    private double total;
 }
-

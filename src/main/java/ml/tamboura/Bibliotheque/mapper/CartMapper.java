@@ -1,44 +1,43 @@
 package ml.tamboura.Bibliotheque.mapper;
 
+import ml.tamboura.Bibliotheque.dto.BookDTO;
 import ml.tamboura.Bibliotheque.dto.CartDTO;
 import ml.tamboura.Bibliotheque.dto.CartItemDTO;
 import ml.tamboura.Bibliotheque.entity.Cart;
 import ml.tamboura.Bibliotheque.entity.CartItem;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CartMapper {
 
     public CartDTO toDTO(Cart cart) {
+        if (cart == null) return null;
 
-        List<CartItemDTO> items = cart.getItems().stream()
-                .map(this::toItemDTO)
-                .toList();
-
-        double total = items.stream()
-                .mapToDouble(CartItemDTO::getTotal)
-                .sum();
-
-        CartDTO dto = new CartDTO();
-        dto.setCartId(cart.getId());
-        dto.setItems(items);
-        dto.setTotalPrice(total);
-
-        return dto;
+        return CartDTO.builder()
+                .items(cart.getItems().stream()
+                        .map(this::toItemDTO)
+                        .collect(Collectors.toList()))
+                .total(0) // Le total sera calculé côté service
+                .build();
     }
 
-    private CartItemDTO toItemDTO(CartItem item) {
+    public CartItemDTO toItemDTO(CartItem item) {
+        return CartItemDTO.builder()
+                .id(item.getId())
+                .quantity(item.getQuantity())
+                .book(toBookDTO(item.getBook()))
+                .build();
+    }
 
-        CartItemDTO dto = new CartItemDTO();
-        dto.setBookId(item.getBook().getId());
-        dto.setTitle(item.getBook().getTitle());
-        dto.setPrice(item.getBook().getPrice());
-        dto.setQuantity(item.getQuantity());
-        dto.setTotal(item.getBook().getPrice() * item.getQuantity());
-
-        return dto;
+    public BookDTO toBookDTO(ml.tamboura.Bibliotheque.entity.Book book) {
+        if (book == null) return null;
+        return BookDTO.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .price(book.getPrice())
+                .build();
     }
 }
-

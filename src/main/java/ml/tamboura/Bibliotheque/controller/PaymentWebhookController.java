@@ -8,32 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/webhooks/payment")
-@RequiredArgsConstructor
+@RequestMapping("/api/webhooks")
 public class PaymentWebhookController {
 
-    private final PaymentService paymentService;
-
-    @PostMapping
-    public ResponseEntity<String> webhook(
-            @RequestBody PaymentWebhookDTO dto) {
-
-        paymentService.handleWebhook(dto);
-        return ResponseEntity.ok("Webhook processed");
+    @PostMapping("/payment")
+    public ResponseEntity<Void> webhook(
+            @RequestHeader(value = "X-Signature", required = false) String signature,
+            @RequestBody PaymentWebhookDTO dto
+    ) {
+        // vérifier signature si présente
+        // traiter le paiement
+        return ResponseEntity.ok().build();
     }
-
-    @PostMapping
-    public ResponseEntity<String> webhook(
-            @RequestHeader("X-WEBHOOK-SECRET") String secret,
-            @RequestBody PaymentWebhookDTO dto) {
-
-        if (!secret.equals("MY_SECRET_KEY")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        paymentService.handleWebhook(dto);
-        return ResponseEntity.ok("OK");
-    }
-
 }
+
 
