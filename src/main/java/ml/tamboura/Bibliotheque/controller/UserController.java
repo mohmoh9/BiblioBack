@@ -1,11 +1,16 @@
 package ml.tamboura.Bibliotheque.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ml.tamboura.Bibliotheque.dto.UpdateProfileRequest;
 import ml.tamboura.Bibliotheque.dto.UserRequest;
 import ml.tamboura.Bibliotheque.dto.UserResponse;
+import ml.tamboura.Bibliotheque.entity.User;
+import ml.tamboura.Bibliotheque.security.CustomUserDetails;
 import ml.tamboura.Bibliotheque.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +48,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getCurrentUserProfile());
     }
 
+    @PutMapping("/me")
+    public ResponseEntity<User> updateProfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody UpdateProfileRequest request
+    ) {
+        User updatedUser = userService.updateProfile(userDetails.getUser(), request);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     // UPDATE
     @PutMapping("/{id}")

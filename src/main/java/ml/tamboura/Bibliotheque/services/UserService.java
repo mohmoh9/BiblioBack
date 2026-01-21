@@ -1,6 +1,7 @@
 package ml.tamboura.Bibliotheque.services;
 
 import lombok.RequiredArgsConstructor;
+import ml.tamboura.Bibliotheque.dto.UpdateProfileRequest;
 import ml.tamboura.Bibliotheque.dto.UserRequest;
 import ml.tamboura.Bibliotheque.dto.UserResponse;
 import ml.tamboura.Bibliotheque.entity.Role;
@@ -97,4 +98,8 @@ public class UserService {
         return mapToResponse(getCurrentUser());
     }
 
+    public User updateProfile(User user, UpdateProfileRequest request) {
+        user.setName(request.getName());
+        return userRepository.save(user);
+    }
 }

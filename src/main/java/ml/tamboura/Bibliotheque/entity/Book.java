@@ -28,6 +28,8 @@ public class Book {
     private boolean rentable;
     private boolean sellable;
 
+    private String coverImage;
+
     private double rentPrice;
     private double sellPrice;
 
