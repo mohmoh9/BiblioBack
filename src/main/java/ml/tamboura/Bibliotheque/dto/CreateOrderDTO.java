@@ -1,8 +1,12 @@
 package ml.tamboura.Bibliotheque.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateOrderDTO {
     private String paymentMethod; // PAYPAL | MOBILE_MONEY
 }

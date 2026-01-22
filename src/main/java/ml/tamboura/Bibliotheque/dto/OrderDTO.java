@@ -1,12 +1,16 @@
 package ml.tamboura.Bibliotheque.dto;
 
-import lombok.Data;
+import lombok.*;
 import ml.tamboura.Bibliotheque.entity.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class OrderDTO {
 
     private Long orderId;

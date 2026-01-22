@@ -1,9 +1,14 @@
 package ml.tamboura.Bibliotheque.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
+@Builder
+
 public class BookRequest {
 
     private String title;

@@ -1,9 +1,13 @@
 package ml.tamboura.Bibliotheque.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateProfileRequest {
 
     @NotBlank

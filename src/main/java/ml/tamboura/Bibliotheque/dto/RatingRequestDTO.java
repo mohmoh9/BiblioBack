@@ -1,8 +1,13 @@
 package ml.tamboura.Bibliotheque.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class RatingRequestDTO {
     private int rating; // 1 à 5
 }

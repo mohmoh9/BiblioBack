@@ -11,7 +11,9 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
 
     @Id

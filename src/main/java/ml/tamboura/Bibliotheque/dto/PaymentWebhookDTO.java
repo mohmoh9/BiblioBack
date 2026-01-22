@@ -1,8 +1,12 @@
 package ml.tamboura.Bibliotheque.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class PaymentWebhookDTO {
 
     private String transactionId;

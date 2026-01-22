@@ -1,8 +1,12 @@
 package ml.tamboura.Bibliotheque.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class OrderItemDTO {
 
     private Long bookId;
