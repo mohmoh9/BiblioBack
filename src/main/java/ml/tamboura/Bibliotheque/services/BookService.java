@@ -39,6 +39,7 @@ public class BookService {
                 .rentPrice(request.getRentPrice())
                 .sellPrice(request.getSellPrice())
                 .quantity(request.getQuantity())
+                .coverImage(request.getCoverImage())
                 .build();
 
         return bookRepository.save(book);
@@ -56,9 +57,15 @@ public class BookService {
         book.setRentPrice(request.getRentPrice());
         book.setSellPrice(request.getSellPrice());
         book.setQuantity(request.getQuantity());
+        book.setCoverImage(request.getCoverImage());
 
         return bookRepository.save(book);
     }
+
+    public Book save(Book book) {
+        return bookRepository.save(book);
+    }
+
 
     /* ================= BUY ================= */
 

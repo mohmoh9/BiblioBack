@@ -16,7 +16,7 @@ public class BookRequest {
     private String isbn;
     private String description;
 
-    private double price;
+    private String coverImage;
 
     private boolean rentable;
     private boolean sellable;
@@ -26,13 +26,12 @@ public class BookRequest {
 
     private int quantity;
 
-    public BookRequest(String title, String author, String isbn, String description, double price, boolean rentable, boolean sellable, double rentPrice, double sellPrice, int quantity) {
+    public BookRequest(String title, String author, String isbn, String description, String coverImage, boolean rentable, boolean sellable, double rentPrice, double sellPrice, int quantity) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.description = description;
-        this.price = price;
-        this.rentable = rentable;
+        this.coverImage = coverImage;        this.rentable = rentable;
         this.sellable = sellable;
         this.rentPrice = rentPrice;
         this.sellPrice = sellPrice;

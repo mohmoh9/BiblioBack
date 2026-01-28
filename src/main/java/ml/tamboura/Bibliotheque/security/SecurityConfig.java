@@ -43,10 +43,13 @@ public class SecurityConfig {
                 // ✅ règles d’accès
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/uploads/**",
                                 "/api/auth/**",
                                 "/api/webhooks/**",
                                 "/api/books/**"
                         ).permitAll()
+                        .requestMatchers("/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
